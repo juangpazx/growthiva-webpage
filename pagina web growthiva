@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growthiva — Inteligencia y Automatización</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #2B5CE6; --blue-dark: #1a3bbf;
+    --green: #7ED321; --green-bright: #9AE33A;
+    --dark: #141C2E; --dark2: #1e2d4a; --mid: #3a4d6b;
+    --light: #f5f4f0; --white: #ffffff; --card-bg: #f9f8f5;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--dark); overflow-x: hidden; }
+ 
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 5%;
+    background: rgba(245,244,240,0.9); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(43,92,230,0.08);
+    animation: fadeDown .6s ease both;
+  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);} }
+  .nav-logo { display:flex;align-items:center;gap:.7rem;text-decoration:none; }
+  .nav-logo-icon { width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:var(--white); }
+  .nav-logo-text { font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;color:var(--dark); }
+  .nav-logo-text span { color:var(--blue); }
+  nav ul { list-style:none;display:flex;gap:2rem; }
+  nav ul a { text-decoration:none;color:var(--mid);font-size:.92rem;font-weight:500;transition:color .2s; }
+  nav ul a:hover { color:var(--blue); }
+  .nav-cta { background:var(--blue);color:var(--white);padding:.55rem 1.4rem;border-radius:50px;text-decoration:none;font-size:.9rem;font-weight:500;transition:background .2s,transform .15s; }
+  .nav-cta:hover { background:var(--blue-dark);transform:translateY(-1px); }
+ 
+  /* HERO */
+  .hero { min-height:100vh;display:flex;align-items:center;padding:8rem 5% 5rem;position:relative;overflow:hidden; }
+  .hero-bg { position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 70% at 70% 40%,rgba(43,92,230,.09) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 20% 80%,rgba(126,211,33,.07) 0%,transparent 60%); }
+  .hero-dots { position:absolute;inset:0;z-index:0;background-image:radial-gradient(circle,rgba(43,92,230,.15) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 80% 80% at 60% 40%,black 0%,transparent 70%); }
+  .hero-content { position:relative;z-index:1;max-width:640px; }
+  .hero-badge { display:inline-flex;align-items:center;gap:.5rem;background:rgba(43,92,230,.1);border:1px solid rgba(43,92,230,.2);color:var(--blue);border-radius:50px;padding:.35rem 1rem;font-size:.82rem;font-weight:500;margin-bottom:1.8rem;animation:fadeUp .7s .1s ease both; }
+  .hero-badge span { width:7px;height:7px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.4;} }
+  .hero h1 { font-family:'Syne',sans-serif;font-size:clamp(2.6rem,5.5vw,4.2rem);font-weight:800;line-height:1.1;color:var(--dark);animation:fadeUp .7s .2s ease both; }
+  .hero h1 em { font-style:normal;color:var(--blue); }
+  .hero h1 .green { color:var(--green); }
+  .hero-sub { margin-top:1.4rem;font-size:1.08rem;line-height:1.7;color:var(--mid);max-width:520px;animation:fadeUp .7s .35s ease both; }
+  .speed-pill { display:inline-flex;align-items:center;gap:.5rem;background:rgba(126,211,33,.12);border:1px solid rgba(126,211,33,.3);color:#4a8000;border-radius:50px;padding:.3rem .9rem;font-size:.8rem;font-weight:600;margin-top:1rem;animation:fadeUp .7s .42s ease both; }
+  .speed-pill svg { width:13px;height:13px; }
+  .hero-actions { display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.4rem;animation:fadeUp .7s .5s ease both; }
+  .btn-primary { background:var(--blue);color:var(--white);padding:.85rem 2rem;border-radius:50px;text-decoration:none;font-weight:500;font-size:1rem;transition:all .2s;box-shadow:0 4px 20px rgba(43,92,230,.3); }
+  .btn-primary:hover { background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 28px rgba(43,92,230,.35); }
+  .btn-whatsapp { display:flex;align-items:center;gap:.5rem;background:#25D366;color:var(--white);padding:.85rem 1.8rem;border-radius:50px;text-decoration:none;font-weight:500;font-size:1rem;transition:all .2s; }
+  .btn-whatsapp:hover { background:#1da851;transform:translateY(-2px); }
+  .hero-stats { display:flex;gap:2.5rem;flex-wrap:wrap;margin-top:3.5rem;animation:fadeUp .7s .65s ease both; }
+  .stat-num { font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--dark); }
+  .stat-num span { color:var(--blue); }
+  .stat-label { font-size:.82rem;color:var(--mid);margin-top:.1rem; }
+  .hero-card { position:absolute;right:5%;top:50%;transform:translateY(-50%);background:var(--white);border-radius:20px;padding:1.8rem;box-shadow:0 20px 60px rgba(20,28,46,.12);width:280px;animation:floatIn .9s .6s ease both,float 5s 1.5s ease-in-out infinite alternate;z-index:1; }
+  @keyframes floatIn{from{opacity:0;transform:translateY(calc(-50% + 24px));}to{opacity:1;transform:translateY(-50%);}}
+  @keyframes float{from{transform:translateY(-50%);}to{transform:translateY(calc(-50% - 12px));}}
+  .hero-card-title { font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--dark);margin-bottom:1rem; }
+  .hero-card-items { display:flex;flex-direction:column;gap:.65rem; }
+  .hci { display:flex;align-items:center;gap:.7rem;background:var(--card-bg);border-radius:10px;padding:.65rem .9rem;font-size:.85rem;color:var(--dark);font-weight:500; }
+  .hci-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+  .hci-dot.blue { background:var(--blue); } .hci-dot.green { background:var(--green); }
+  .hci-arrow { margin-left:auto;color:var(--blue);font-size:.9rem; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);} }
+ 
+  /* SECTIONS */
+  section { padding:6rem 5%; }
+  .section-label { display:inline-block;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:1rem; }
+  .section-title { font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,3.5vw,2.8rem);line-height:1.15;color:var(--dark);max-width:600px; }
+  .section-title em { font-style:normal;color:var(--blue); }
+  .section-sub { font-size:1rem;color:var(--mid);line-height:1.7;max-width:520px;margin-top:.9rem; }
+ 
+  /* SERVICES */
+  #servicios { background:var(--white); }
+  .services-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem; }
+  .service-card { background:var(--card-bg);border:1.5px solid rgba(20,28,46,.07);border-radius:20px;padding:2rem;transition:all .25s;position:relative;overflow:hidden; }
+  .service-card::before { content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--green));transform:scaleX(0);transform-origin:left;transition:transform .3s ease; }
+  .service-card:hover::before { transform:scaleX(1); }
+  .service-card:hover { border-color:rgba(43,92,230,.2);box-shadow:0 12px 36px rgba(43,92,230,.1);transform:translateY(-4px); }
+  .service-icon { width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.3rem; }
+  .si-blue{background:rgba(43,92,230,.12);} .si-green{background:rgba(126,211,33,.15);} .si-mix{background:linear-gradient(135deg,rgba(43,92,230,.1),rgba(126,211,33,.1));}
+  .service-card h3 { font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--dark);margin-bottom:.65rem; }
+  .service-card p { font-size:.9rem;color:var(--mid);line-height:1.65; }
+  .service-tag { display:inline-block;margin-top:1.1rem;font-size:.75rem;font-weight:600;letter-spacing:.06em;background:rgba(43,92,230,.08);color:var(--blue);padding:.25rem .75rem;border-radius:50px; }
+ 
+  /* SPEED */
+  #velocidad { background:var(--dark);position:relative;overflow:hidden; }
+  #velocidad::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(126,211,33,.08) 0%,transparent 65%); }
+  .speed-inner { position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center; }
+  #velocidad .section-label { color:var(--green); }
+  #velocidad .section-title { color:var(--white); }
+  #velocidad .section-title em { color:var(--green); }
+  #velocidad .section-sub { color:rgba(255,255,255,.6); }
+  .speed-items { display:flex;flex-direction:column;gap:1rem;margin-top:2rem; }
+  .speed-item { display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:1.1rem 1.4rem;transition:background .2s; }
+  .speed-item:hover { background:rgba(126,211,33,.08); }
+  .speed-ico { font-size:1.4rem;flex-shrink:0; }
+  .speed-item h4 { font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--white);margin-bottom:.2rem; }
+  .speed-item p { font-size:.83rem;color:rgba(255,255,255,.5); }
+  .speed-bar-group { margin-bottom:.9rem; }
+  .speed-bar-label { display:flex;justify-content:space-between;font-size:.8rem;color:rgba(255,255,255,.6);margin-bottom:.45rem;font-weight:500; }
+  .speed-bar-track { background:rgba(255,255,255,.08);border-radius:50px;height:10px;overflow:hidden; }
+  .speed-bar-fill { height:100%;border-radius:50px;background:linear-gradient(90deg,var(--blue),var(--green));animation:barGrow 1.4s ease both; }
+  .w90{width:90%;animation-delay:.2s;} .w60{width:60%;background:rgba(255,255,255,.18)!important;animation-delay:.1s;}
+  .w95{width:95%;animation-delay:.4s;} .w55{width:55%;background:rgba(255,255,255,.18)!important;animation-delay:.3s;}
+  .w85{width:85%;animation-delay:.6s;} .w50{width:50%;background:rgba(255,255,255,.18)!important;animation-delay:.5s;}
+  @keyframes barGrow { from{width:0;opacity:0;}to{opacity:1;} }
+ 
+  /* PRICING */
+  #precios { background:var(--light); }
+  .pricing-tabs { display:flex;gap:.6rem;flex-wrap:wrap;margin-top:2.5rem;margin-bottom:2.5rem; }
+  .ptab { padding:.5rem 1.2rem;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;border:1.5px solid rgba(20,28,46,.15);color:var(--mid);background:transparent;transition:all .2s;font-family:'DM Sans',sans-serif; }
+  .ptab.active,.ptab:hover { background:var(--blue);color:var(--white);border-color:var(--blue); }
+  .pricing-section { display:none; }
+  .pricing-section.active { display:block; }
+  .plans-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem; }
+  .plan-card { background:var(--white);border:1.5px solid rgba(20,28,46,.08);border-radius:22px;padding:2rem;position:relative;transition:all .25s; }
+  .plan-card:hover { transform:translateY(-5px);box-shadow:0 16px 40px rgba(43,92,230,.12); }
+  .plan-card.popular { border-color:var(--blue);box-shadow:0 8px 30px rgba(43,92,230,.15); }
+  .popular-badge { position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--blue),var(--blue-dark));color:var(--white);font-size:.72rem;font-weight:700;letter-spacing:.08em;padding:.28rem 1rem;border-radius:50px;white-space:nowrap; }
+  .plan-name { font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--mid);margin-bottom:.5rem; }
+  .plan-price { font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;color:var(--dark);line-height:1;margin-bottom:.2rem; }
+  .plan-price sup { font-size:1.2rem;vertical-align:top;margin-top:.3rem;display:inline-block; }
+  .plan-price sub { font-size:.85rem;font-weight:400;color:var(--mid); }
+  .plan-desc { font-size:.85rem;color:var(--mid);margin-bottom:1.5rem;line-height:1.5; }
+  .plan-divider { border:none;border-top:1px solid rgba(20,28,46,.07);margin-bottom:1.3rem; }
+  .plan-features { list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:1.8rem; }
+  .plan-features li { font-size:.88rem;color:var(--mid);display:flex;gap:.6rem;align-items:flex-start;line-height:1.4; }
+  .feat-check{color:var(--green);font-weight:700;flex-shrink:0;} .feat-x{color:#ccc;flex-shrink:0;}
+  .plan-cta { display:block;text-align:center;width:100%;padding:.8rem;border-radius:50px;font-weight:600;font-size:.9rem;text-decoration:none;transition:all .2s; }
+  .plan-cta.primary { background:var(--blue);color:var(--white);box-shadow:0 4px 16px rgba(43,92,230,.25); }
+  .plan-cta.primary:hover { background:var(--blue-dark);transform:translateY(-1px); }
+  .plan-cta.outline { border:1.5px solid rgba(20,28,46,.15);color:var(--dark); }
+  .plan-cta.outline:hover { border-color:var(--blue);color:var(--blue); }
+ 
+  /* AUTO CATALOG */
+  .auto-catalog { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-top:2rem; }
+  .auto-item { background:var(--white);border:1.5px solid rgba(20,28,46,.07);border-radius:14px;padding:1.2rem 1.4rem;display:flex;gap:.9rem;align-items:flex-start;transition:all .2s; }
+  .auto-item:hover { border-color:rgba(43,92,230,.2);box-shadow:0 6px 20px rgba(43,92,230,.08);transform:translateY(-2px); }
+  .auto-emoji { font-size:1.4rem;flex-shrink:0; }
+  .auto-item h4 { font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--dark);margin-bottom:.25rem; }
+  .auto-item p { font-size:.8rem;color:var(--mid);line-height:1.5; }
+ 
+  /* PROCESO */
+  #proceso { background:var(--white); }
+  .steps { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-top:3rem; }
+  .step { text-align:center;padding:2rem 1.5rem;background:var(--card-bg);border-radius:20px;border:1.5px solid rgba(20,28,46,.07);transition:transform .25s,box-shadow .25s; }
+  .step:hover { transform:translateY(-4px);box-shadow:0 10px 30px rgba(43,92,230,.1); }
+  .step-num { font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:rgba(43,92,230,.12);line-height:1;margin-bottom:1rem; }
+  .step h4 { font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--dark);margin-bottom:.5rem; }
+  .step p { font-size:.88rem;color:var(--mid);line-height:1.6; }
+ 
+  /* POR QUÉ */
+  #por-que { background:var(--dark);color:var(--white); }
+  #por-que .section-title { color:var(--white);max-width:none; }
+  #por-que .section-title em { color:var(--green); }
+  #por-que .section-label { color:var(--green); }
+  #por-que .section-sub { color:rgba(255,255,255,.6); }
+  .why-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:3rem; }
+  .why-item { background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:background .2s; }
+  .why-item:hover { background:rgba(43,92,230,.15); }
+  .why-check { width:36px;height:36px;flex-shrink:0;background:rgba(126,211,33,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:1rem; }
+  .why-item h4 { font-family:'Syne',sans-serif;font-weight:700;color:var(--white);font-size:.95rem;margin-bottom:.35rem; }
+  .why-item p { font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.55; }
+ 
+  /* CONTACT */
+  #contacto { background:linear-gradient(135deg,var(--blue) 0%,#1a3bbf 100%);color:var(--white);text-align:center;padding:6rem 5%;position:relative;overflow:hidden; }
+  #contacto::before { content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.06) 1px,transparent 1px);background-size:30px 30px; }
+  #contacto .content { position:relative;z-index:1; }
+  #contacto h2 { font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;line-height:1.1;margin-bottom:1rem; }
+  #contacto h2 span { color:var(--green); }
+  #contacto p { font-size:1.05rem;color:rgba(255,255,255,.75);max-width:480px;margin:0 auto 2.5rem;line-height:1.65; }
+  .contact-options { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;max-width:560px;margin:0 auto; }
+  .contact-btn { display:flex;align-items:center;gap:.6rem;padding:.9rem 1.6rem;border-radius:50px;font-weight:600;font-size:.95rem;text-decoration:none;transition:all .2s;flex:1;min-width:200px;justify-content:center; }
+  .contact-btn.email { background:rgba(255,255,255,.15);color:var(--white);border:1.5px solid rgba(255,255,255,.25); }
+  .contact-btn.email:hover { background:rgba(255,255,255,.25); }
+  .contact-btn.whatsapp { background:#25D366;color:var(--white); }
+  .contact-btn.whatsapp:hover { background:#1da851;transform:translateY(-2px); }
+ 
+  /* FOOTER */
+  footer { background:var(--dark2);color:rgba(255,255,255,.5);padding:3rem 5%; }
+  .footer-inner { display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;border-bottom:1px solid rgba(255,255,255,.07);padding-bottom:2rem;margin-bottom:1.5rem; }
+  .footer-logo { font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--white); }
+  .footer-logo span { color:var(--blue); }
+  .footer-links { display:flex;gap:1.5rem;flex-wrap:wrap; }
+  .footer-links a { color:rgba(255,255,255,.5);text-decoration:none;font-size:.85rem;transition:color .2s; }
+  .footer-links a:hover { color:var(--blue); }
+  .social-links { display:flex;gap:.7rem; }
+  .social-btn { width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;text-decoration:none;color:rgba(255,255,255,.6);transition:all .2s; }
+  .social-btn:hover { background:var(--blue);border-color:var(--blue);color:var(--white);transform:translateY(-2px); }
+  .social-btn svg { width:16px;height:16px;fill:currentColor; }
+  .footer-bottom { display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem; }
+  .footer-bottom p { font-size:.82rem; }
+  .footer-bottom a { color:var(--blue);text-decoration:none; }
+ 
+  @media(max-width:960px) { .hero-card{display:none;} .speed-inner{grid-template-columns:1fr;} .why-grid{grid-template-columns:1fr;} }
+  @media(max-width:640px) { nav ul{display:none;} .hero{padding-top:7rem;} .hero-stats{gap:1.5rem;} .footer-inner{flex-direction:column;align-items:flex-start;} }
+</style>
+</head>
+<body>
+ 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">G</div>
+    <span class="nav-logo-text">Growth<span>iva</span></span>
+  </a>
+  <ul>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#por-que">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="https://wa.me/34614078148" target="_blank" class="nav-cta">Hablar por WhatsApp →</a>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Inteligencia y Automatización</div>
+    <h1>Tu negocio en <em>piloto automático</em> con <span class="green">IA</span></h1>
+    <p class="hero-sub">En Growthiva diseñamos páginas web, automatizaciones y apps internas que hacen crecer tu empresa. Más rápido que nadie, sin sacrificar calidad.</p>
+    <div class="speed-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Entrega más rápida del mercado — automatizaciones en 48h
+    </div>
+    <div class="hero-actions">
+      <a href="https://wa.me/34614078148?text=Hola%20Growthiva,%20me%20gustaría%20saber%20más%20sobre%20sus%20servicios" target="_blank" class="btn-whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <a href="#servicios" class="btn-primary">Ver servicios</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">48<span>h</span></div><div class="stat-label">Automatizaciones listas</div></div>
+      <div class="stat-item"><div class="stat-num">7<span>d</span></div><div class="stat-label">Webs publicadas</div></div>
+      <div class="stat-item"><div class="stat-num">24<span>/7</span></div><div class="stat-label">Sistemas trabajando</div></div>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-title">¿Qué podemos hacer por ti?</div>
+    <div class="hero-card-items">
+      <div class="hci"><div class="hci-dot blue"></div> Páginas Web <span class="hci-arrow">→</span></div>
+      <div class="hci"><div class="hci-dot green"></div> Automatizaciones <span class="hci-arrow">→</span></div>
+      <div class="hci"><div class="hci-dot blue"></div> Apps Internas <span class="hci-arrow">→</span></div>
+      <div class="hci"><div class="hci-dot green"></div> Chatbots con IA <span class="hci-arrow">→</span></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-label">Servicios</div>
+  <h2 class="section-title">Todo lo que tu empresa necesita para <em>crecer en digital</em></h2>
+  <p class="section-sub">Soluciones a medida para negocios que quieren más tiempo, más clientes y mejores resultados.</p>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-icon si-blue">🌐</div><h3>Páginas Web Profesionales</h3><p>Diseñamos sitios modernos, rápidos y orientados a convertir visitantes en clientes. Desde landing pages hasta portales completos.</p><span class="service-tag">Diseño · Desarrollo · SEO</span></div>
+    <div class="service-card"><div class="service-icon si-green">⚡</div><h3>Automatizaciones de Procesos</h3><p>Eliminamos tareas repetitivas conectando tus herramientas para que tu equipo se enfoque en lo que realmente importa.</p><span class="service-tag">Make · N8N · Zapier</span></div>
+    <div class="service-card"><div class="service-icon si-mix">🔒</div><h3>Apps Internas Privadas</h3><p>Desarrollamos aplicaciones internas a medida para gestión y operación. Seguras, rápidas y 100% adaptadas a tu negocio.</p><span class="service-tag">Dashboard · CRM · ERP</span></div>
+    <div class="service-card"><div class="service-icon si-blue">🤖</div><h3>Chatbots con IA</h3><p>Atención al cliente 24/7, calificación de leads y soporte automático. Chatbots entrenados con la información de tu empresa.</p><span class="service-tag">GPT · Claude · WhatsApp</span></div>
+    <div class="service-card"><div class="service-icon si-green">📊</div><h3>Consultoría Digital</h3><p>Analizamos tu operación e identificamos oportunidades de automatización con tecnología accesible y probada.</p><span class="service-tag">Diagnóstico · Estrategia</span></div>
+    <div class="service-card"><div class="service-icon si-mix">🔗</div><h3>Integraciones & APIs</h3><p>Conectamos tus plataformas entre sí: CRM, e-commerce, sistemas de pago, ERPs y cualquier herramienta que ya uses.</p><span class="service-tag">API · Webhooks · Sync</span></div>
+  </div>
+</section>
+ 
+<!-- VELOCIDAD -->
+<section id="velocidad">
+  <div class="speed-inner">
+    <div>
+      <div class="section-label">Nuestra ventaja</div>
+      <h2 class="section-title">Entregamos <em>más rápido</em> que cualquier agencia</h2>
+      <p class="section-sub">Mientras otras agencias tardan semanas, nosotros operamos en días. Sin burocracia, sin reuniones innecesarias.</p>
+      <div class="speed-items">
+        <div class="speed-item"><div class="speed-ico">⚡</div><div><h4>Automatizaciones en 48 horas</h4><p>Flujos simples y medianos listos en dos días desde la aprobación.</p></div></div>
+        <div class="speed-item"><div class="speed-ico">🌐</div><div><h4>Webs profesionales en 7 días</h4><p>Landing pages y sitios corporativos publicados en una semana.</p></div></div>
+        <div class="speed-item"><div class="speed-ico">🤖</div><div><h4>Chatbots funcionales en 72 horas</h4><p>Bot entrenado, integrado y listo para atender a tus clientes.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div style="color:rgba(255,255,255,.4);font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.2rem;">Tiempo de entrega comparado</div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>🟢 Growthiva — Automatización</span><span style="color:var(--green);font-weight:700;">2 días</span></div><div class="speed-bar-track"><div class="speed-bar-fill w90"></div></div></div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>⚪ Agencia tradicional</span><span>3–4 semanas</span></div><div class="speed-bar-track"><div class="speed-bar-fill w60"></div></div></div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>🟢 Growthiva — Web</span><span style="color:var(--green);font-weight:700;">7 días</span></div><div class="speed-bar-track"><div class="speed-bar-fill w95"></div></div></div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>⚪ Agencia tradicional — Web</span><span>6–10 semanas</span></div><div class="speed-bar-track"><div class="speed-bar-fill w55"></div></div></div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>🟢 Growthiva — Chatbot</span><span style="color:var(--green);font-weight:700;">3 días</span></div><div class="speed-bar-track"><div class="speed-bar-fill w85"></div></div></div>
+      <div class="speed-bar-group"><div class="speed-bar-label"><span>⚪ Agencia tradicional — Chatbot</span><span>2–3 semanas</span></div><div class="speed-bar-track"><div class="speed-bar-fill w50"></div></div></div>
+      <div style="margin-top:1.2rem;padding:1rem 1.3rem;background:rgba(126,211,33,.08);border:1px solid rgba(126,211,33,.2);border-radius:12px;">
+        <p style="font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.5;">🏆 <strong style="color:var(--green);">Garantía de velocidad:</strong> Si no cumplimos el plazo acordado, el siguiente sprint es sin costo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PRECIOS -->
+<section id="precios">
+  <div class="section-label">Precios</div>
+  <h2 class="section-title">Planes <em>claros y accesibles</em> para cada necesidad</h2>
+  <p class="section-sub">Sin letra pequeña. Elegí el plan que mejor se adapta y escalá cuando quieras.</p>
+ 
+  <div class="pricing-tabs">
+    <button class="ptab active" onclick="showPricing(this,'chatbots')">🤖 Chatbots IA</button>
+    <button class="ptab" onclick="showPricing(this,'automatizaciones')">⚡ Automatizaciones</button>
+    <button class="ptab" onclick="showPricing(this,'webs')">🌐 Páginas Web</button>
+    <button class="ptab" onclick="showPricing(this,'apps')">🔒 Apps Internas</button>
+  </div>
+ 
+  <!-- CHATBOTS -->
+  <div class="pricing-section active" id="pricing-chatbots">
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>€</sup>197</div>
+        <div class="plan-desc">Perfecto para empezar a automatizar la atención al cliente.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Chatbot con IA integrada</li>
+          <li><span class="feat-check">✓</span> Hasta 3 flujos de conversación</li>
+          <li><span class="feat-check">✓</span> Web o WhatsApp</li>
+          <li><span class="feat-check">✓</span> Entrenado con tu información</li>
+          <li><span class="feat-check">✓</span> Soporte 30 días</li>
+          <li><span class="feat-x">✗</span> <span style="opacity:.45">CRM / integraciones externas</span></li>
+          <li><span class="feat-x">✗</span> <span style="opacity:.45">Transferencia a agente humano</span></li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20el%20Chatbot%20Básico%20(€197)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⚡ MÁS POPULAR</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>€</sup>497</div>
+        <div class="plan-desc">Ideal para negocios que quieren automatizar atención y ventas de verdad.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Chatbot con IA avanzada</li>
+          <li><span class="feat-check">✓</span> Flujos ilimitados</li>
+          <li><span class="feat-check">✓</span> Web + WhatsApp + Instagram</li>
+          <li><span class="feat-check">✓</span> Calificación automática de leads</li>
+          <li><span class="feat-check">✓</span> Integración CRM o Google Sheets</li>
+          <li><span class="feat-check">✓</span> Transferencia a agente humano</li>
+          <li><span class="feat-check">✓</span> Soporte 90 días</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20el%20Chatbot%20Profesional%20(€497)" target="_blank" class="plan-cta primary">Contratar →</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><sup>€</sup>997</div>
+        <div class="plan-desc">Solución completa para empresas con alto volumen de consultas.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Todo lo del plan Profesional</li>
+          <li><span class="feat-check">✓</span> Multiidioma (ES / EN / PT)</li>
+          <li><span class="feat-check">✓</span> Dashboard de analíticas</li>
+          <li><span class="feat-check">✓</span> Integración ERP / Shopify / HubSpot</li>
+          <li><span class="feat-check">✓</span> Reentrenamiento mensual</li>
+          <li><span class="feat-check">✓</span> Soporte prioritario 6 meses</li>
+          <li><span class="feat-check">✓</span> Reunión mensual de revisión</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20el%20Chatbot%20Premium%20(€997)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- AUTOMATIZACIONES -->
+  <div class="pricing-section" id="pricing-automatizaciones">
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>€</sup>149</div>
+        <div class="plan-desc">Una automatización simple lista en 48 horas.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> 1 flujo automatizado</li>
+          <li><span class="feat-check">✓</span> Hasta 3 apps conectadas</li>
+          <li><span class="feat-check">✓</span> Entrega en 48 h</li>
+          <li><span class="feat-check">✓</span> Soporte 15 días</li>
+          <li><span class="feat-x">✗</span> <span style="opacity:.45">Lógica condicional avanzada</span></li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Automatización%20Básica%20(€149)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⚡ MÁS POPULAR</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>€</sup>349</div>
+        <div class="plan-desc">Automatizaciones medianas con lógica avanzada y múltiples pasos.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Hasta 3 flujos automatizados</li>
+          <li><span class="feat-check">✓</span> Sin límite de pasos</li>
+          <li><span class="feat-check">✓</span> Condiciones, filtros y ramas</li>
+          <li><span class="feat-check">✓</span> Notificaciones y reportes automáticos</li>
+          <li><span class="feat-check">✓</span> Entrega en 72 h</li>
+          <li><span class="feat-check">✓</span> Soporte 60 días</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Automatización%20Profesional%20(€349)" target="_blank" class="plan-cta primary">Contratar →</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><sup>€</sup>749</div>
+        <div class="plan-desc">Sistema completo de automatización para toda tu operación.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Flujos ilimitados</li>
+          <li><span class="feat-check">✓</span> Integración con IA (GPT, Claude)</li>
+          <li><span class="feat-check">✓</span> Conexión con cualquier API</li>
+          <li><span class="feat-check">✓</span> Panel de control personalizado</li>
+          <li><span class="feat-check">✓</span> Documentación completa</li>
+          <li><span class="feat-check">✓</span> Soporte prioritario 6 meses</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Automatización%20Premium%20(€749)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+    </div>
+ 
+    <div style="margin-top:3.5rem;">
+      <div class="section-label" style="margin-bottom:.5rem;">Catálogo</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;color:var(--dark);margin-bottom:.4rem;">Automatizaciones que podemos implementar hoy</h3>
+      <p style="color:var(--mid);font-size:.9rem;margin-bottom:1.5rem;">Algunas de las más populares. Si tenés algo distinto en mente, consultanos.</p>
+      <div class="auto-catalog">
+        <div class="auto-item"><div class="auto-emoji">📧</div><div><h4>Email de bienvenida automático</h4><p>Envía un email personalizado cada vez que alguien se registra o compra.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">📅</div><div><h4>Agenda de reuniones automática</h4><p>Calendly + Google Calendar + confirmación y recordatorio por email y WhatsApp.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">🛒</div><div><h4>Notificación de nueva venta</h4><p>Alerta instantánea por WhatsApp o Slack cuando entra un pedido nuevo.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">📋</div><div><h4>CRM automático desde formulario</h4><p>Tus leads pasan directo a tu hoja de cálculo o CRM sin tocar nada.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">🔔</div><div><h4>Seguimiento de leads fríos</h4><p>Recordatorio automático si un lead no recibe respuesta en más de 24 horas.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">📊</div><div><h4>Reporte semanal automático</h4><p>Resumen de métricas clave enviado cada lunes a tu email o Slack.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">🧾</div><div><h4>Factura automática al cobro</h4><p>Genera y envía facturas PDF automáticamente al confirmar un pago.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">📱</div><div><h4>WhatsApp de seguimiento post-compra</h4><p>Mensaje automático 3 días después pidiendo reseña o con upsell.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">🤝</div><div><h4>Onboarding de nuevo cliente</h4><p>Secuencia de emails + tareas internas creadas automáticamente al firmar.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">📦</div><div><h4>Alerta de stock bajo</h4><p>Aviso automático cuando el inventario de un producto baja del mínimo.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">💬</div><div><h4>Respuesta automática en redes</h4><p>Reply instantáneo a comentarios o DMs de Instagram o Facebook.</p></div></div>
+        <div class="auto-item"><div class="auto-emoji">🗂️</div><div><h4>Organización automática de archivos</h4><p>Mueve, renombra y archiva documentos en Google Drive según reglas.</p></div></div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- WEBS -->
+  <div class="pricing-section" id="pricing-webs">
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>€</sup>397</div>
+        <div class="plan-desc">Landing page profesional lista en 7 días.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Diseño personalizado (1 página)</li>
+          <li><span class="feat-check">✓</span> Responsive (móvil + escritorio)</li>
+          <li><span class="feat-check">✓</span> Formulario de contacto</li>
+          <li><span class="feat-check">✓</span> SEO básico</li>
+          <li><span class="feat-check">✓</span> Entrega en 7 días</li>
+          <li><span class="feat-x">✗</span> <span style="opacity:.45">Blog o secciones adicionales</span></li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Web%20Básica%20(€397)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⚡ MÁS POPULAR</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>€</sup>797</div>
+        <div class="plan-desc">Sitio web completo para una presencia digital sólida.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Hasta 5 páginas</li>
+          <li><span class="feat-check">✓</span> Diseño premium a medida</li>
+          <li><span class="feat-check">✓</span> Animaciones y efectos</li>
+          <li><span class="feat-check">✓</span> SEO avanzado</li>
+          <li><span class="feat-check">✓</span> Blog integrado</li>
+          <li><span class="feat-check">✓</span> Google Analytics</li>
+          <li><span class="feat-check">✓</span> Entrega en 10 días</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Web%20Profesional%20(€797)" target="_blank" class="plan-cta primary">Contratar →</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price"><sup>€</sup>1.497</div>
+        <div class="plan-desc">Sitio completo + chatbot IA + automatizaciones integradas.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Todo lo del plan Profesional</li>
+          <li><span class="feat-check">✓</span> Páginas ilimitadas</li>
+          <li><span class="feat-check">✓</span> Chatbot IA integrado</li>
+          <li><span class="feat-check">✓</span> Panel de administración</li>
+          <li><span class="feat-check">✓</span> E-commerce básico (50 productos)</li>
+          <li><span class="feat-check">✓</span> Soporte premium 3 meses</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20Web%20Premium%20(€1.497)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- APPS -->
+  <div class="pricing-section" id="pricing-apps">
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Básico</div>
+        <div class="plan-price"><sup>€</sup>697</div>
+        <div class="plan-desc">App interna simple para centralizar información de tu equipo.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Dashboard con datos clave</li>
+          <li><span class="feat-check">✓</span> Hasta 3 módulos</li>
+          <li><span class="feat-check">✓</span> Login con usuario y contraseña</li>
+          <li><span class="feat-check">✓</span> Conexión a Google Sheets o Airtable</li>
+          <li><span class="feat-check">✓</span> Soporte 30 días</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20App%20Interna%20Básica%20(€697)" target="_blank" class="plan-cta outline">Contratar →</a>
+      </div>
+      <div class="plan-card popular">
+        <div class="popular-badge">⚡ MÁS POPULAR</div>
+        <div class="plan-name">Profesional</div>
+        <div class="plan-price"><sup>€</sup>1.497</div>
+        <div class="plan-desc">CRM o ERP interno completo con roles y permisos de usuario.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Módulos ilimitados</li>
+          <li><span class="feat-check">✓</span> Roles y permisos por usuario</li>
+          <li><span class="feat-check">✓</span> Base de datos propia</li>
+          <li><span class="feat-check">✓</span> Reportes y exportación</li>
+          <li><span class="feat-check">✓</span> Integraciones con APIs externas</li>
+          <li><span class="feat-check">✓</span> Soporte 90 días</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20App%20Interna%20Profesional%20(€1.497)" target="_blank" class="plan-cta primary">Contratar →</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Premium</div>
+        <div class="plan-price" style="font-size:1.8rem;">A medida</div>
+        <div class="plan-desc">Sistema empresarial completo con IA y escalabilidad total.</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Todo lo del plan Profesional</li>
+          <li><span class="feat-check">✓</span> IA integrada en la app</li>
+          <li><span class="feat-check">✓</span> Automatizaciones internas</li>
+          <li><span class="feat-check">✓</span> App móvil (iOS + Android)</li>
+          <li><span class="feat-check">✓</span> SLA y soporte prioritario</li>
+          <li><span class="feat-check">✓</span> Reunión semanal de seguimiento</li>
+        </ul>
+        <a href="https://wa.me/34614078148?text=Hola,%20me%20interesa%20la%20App%20Interna%20Premium" target="_blank" class="plan-cta outline">Consultar precio →</a>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="section-label">Cómo trabajamos</div>
+  <h2 class="section-title">Un proceso <em>claro y simple</em> de principio a fin</h2>
+  <p class="section-sub">Sin tecnicismos, sin sorpresas. Trabajamos contigo en cada paso.</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">01</div><h4>Reunión de diagnóstico</h4><p>Entendemos tu negocio y qué querés lograr. Sin compromiso, sin costo.</p></div>
+    <div class="step"><div class="step-num">02</div><h4>Propuesta a medida</h4><p>Te presentamos la solución exacta con tiempos y costos claros. Sin sorpresas.</p></div>
+    <div class="step"><div class="step-num">03</div><h4>Desarrollo express</h4><p>Construimos rápido con revisiones periódicas. Entrega garantizada en el plazo acordado.</p></div>
+    <div class="step"><div class="step-num">04</div><h4>Lanzamiento & soporte</h4><p>Ponemos todo en marcha y te acompañamos para que saques el máximo provecho.</p></div>
+  </div>
+</section>
+ 
+<!-- POR QUÉ -->
+<section id="por-que">
+  <div class="section-label">Por qué Growthiva</div>
+  <h2 class="section-title">Tecnología que trabaja <em>para vos</em>, no al revés</h2>
+  <p class="section-sub">No somos solo una agencia. Somos el equipo de tecnología que tu empresa necesita para escalar.</p>
+  <div class="why-grid">
+    <div class="why-item"><div class="why-check">⚡</div><div><h4>Entrega más rápida del mercado</h4><p>Automatizaciones en 48h, webs en 7 días. Garantizado o el siguiente sprint es gratis.</p></div></div>
+    <div class="why-item"><div class="why-check">✓</div><div><h4>Soluciones 100% personalizadas</h4><p>No usamos plantillas genéricas. Cada proyecto se diseña desde cero según tus objetivos.</p></div></div>
+    <div class="why-item"><div class="why-check">✓</div><div><h4>Comunicación clara y directa</h4><p>Te explicamos todo sin tecnicismos. Sabés en todo momento en qué etapa está tu proyecto.</p></div></div>
+    <div class="why-item"><div class="why-check">✓</div><div><h4>Resultados medibles</h4><p>Cada solución tiene un objetivo claro: ahorro de tiempo, más ventas o mejor operación.</p></div></div>
+    <div class="why-item"><div class="why-check">✓</div><div><h4>Soporte continuo incluido</h4><p>No desaparecemos al entregar. Estamos disponibles cuando nos necesités.</p></div></div>
+    <div class="why-item"><div class="why-check">✓</div><div><h4>Ágil y sin burocracia</h4><p>Somos un equipo enfocado. Tomamos decisiones rápido y entregamos a tiempo, siempre.</p></div></div>
+  </div>
+</section>
+ 
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="content">
+    <h2>¿Listo para hacer crecer<br>tu negocio con <span>tecnología</span>?</h2>
+    <p>Contactanos hoy y te respondemos en menos de 24 horas. Primera consulta sin costo.</p>
+    <div class="contact-options">
+      <a href="https://wa.me/34614078148?text=Hola%20Growthiva,%20me%20gustaría%20saber%20más%20sobre%20sus%20servicios" target="_blank" class="contact-btn whatsapp">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp · +34 614 07 81 48
+      </a>
+      <a href="mailto:growthivaia@gmail.com" class="contact-btn email">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        growthivaia@gmail.com
+      </a>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Growth<span>iva</span></div>
+      <div style="font-size:.82rem;margin-top:.4rem;color:rgba(255,255,255,.35);">Inteligencia y Automatización</div>
+    </div>
+    <div class="footer-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#precios">Precios</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#por-que">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="social-links">
+      <a href="https://instagram.com/growthiva" target="_blank" class="social-btn" title="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://tiktok.com/@growthiva" target="_blank" class="social-btn" title="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.77a4.85 4.85 0 01-1-.08z"/></svg>
+      </a>
+      <a href="https://linkedin.com/company/growthiva" target="_blank" class="social-btn" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://wa.me/34614078148" target="_blank" class="social-btn" title="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 <strong style="color:rgba(255,255,255,.7)">Growthiva</strong> — Todos los derechos reservados</p>
+    <p><a href="mailto:growthivaia@gmail.com">growthivaia@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+34614078148">+34 614 07 81 48</a></p>
+  </div>
+</footer>
+ 
+<script>
+  function showPricing(btn, tab) {
+    document.querySelectorAll('.pricing-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+    document.getElementById('pricing-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
